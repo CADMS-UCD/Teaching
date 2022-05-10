@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Lab 7</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/vis-9.1.0/vis-network.min.css" rel="stylesheet" />
+<script src="site_libs/vis-9.1.0/vis-network.min.js"></script>
+<script src="site_libs/visNetwork-binding-2.1.0/visNetwork.js"></script>
+<script src="site_libs/FileSaver-1.1.20151003/FileSaver.min.js"></script>
+<script src="site_libs/Blob-1.0/Blob.js"></script>
+<script src="site_libs/canvas-toBlob-1.0/canvas-toBlob.js"></script>
+<script src="site_libs/html2canvas-0.5.0/html2canvas.js"></script>
+<script src="site_libs/jspdf-1.3.2/jspdf.debug.js"></script>
+<link href="site_libs/jquery-sparkline-2.1.2/jquery.sparkline.css" rel="stylesheet" />
+<script src="site_libs/jquery-sparkline-2.1.2/jquery.sparkline.js"></script>
+<script src="site_libs/sparkline-binding-2.0/sparkline.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CADMS</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Pre Workshop
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Intro_to_R.html">Intro to R</a>
+    </li>
+    <li>
+      <a href="Spatial_intro.html">Intro to Spatial data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Contact
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Instructors.html">
+        <span class="fa fa-users"></span>
+         
+        Instructors
+      </a>
+    </li>
+    <li>
+      <a href="https://cadms.vetmed.ucdavis.edu">
+        <span class="fa fa-server"></span>
+         
+        CADMS Website
+      </a>
+    </li>
+    <li>
+      <a href="mailto:jpgo@ucdavis.edu">
+        <span class="fa fa-envelope"></span>
+         
+        Email
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Lab 7</h1>
+
+</div>
+
+
+<div id="objectives" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Objectives</h1>
+<p>In this lab we will be using R, which is an open access software developed for statistical analysis (but can do some data manipulation, simulation and modeling). We will be using the package <code>QuantRRA</code> for rapid risk assessment (still under development). Make sure you have installed the latest version of <a href="https://cloud.r-project.org">R</a>, <a href="https://www.rstudio.com/products/rstudio/">Rstudio</a>, and <a href="https://github.com/jpablo91/QuantRRA">QuantRRA</a>.</p>
+<ul>
+<li>Familiarize with methods to develop risk assessment using R</li>
+<li>Integrate qualitative and quantitative information for the development of RRA</li>
+<li>Develop a system that can be easily updated and re-parametrized</li>
+<li>Use random forest and regression trees to evaluate the sensitivity of the model</li>
+<li>Use the RRA model in multiple regions.</li>
+</ul>
+</div>
+<div id="basics" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Basics</h1>
+<pre class="r"><code># Libraries we will use
+library(sf); library(dplyr)
+library(QuantRRA)</code></pre>
+<div id="sampling-probability-distributions" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Sampling probability distributions</h2>
+<p>By default, R has several functions to sample a distribution and plot the results. For example, if we would like to sample a normal distribution with a mean of 5 and standard deviation of 0.12, we can use the following code:</p>
+<pre class="r"><code># sample the distribution and save it to an object
+x &lt;- rnorm(n = 100, # Number of observations to sample
+           mean = 5, # Mean 
+           sd = 0.12) # Standard deviation
+
+# Plot the observations
+hist(x)</code></pre>
+<p><img src="224_Lab7_files/figure-html/distribution%20sampling-1.png" width="672" /></p>
+<p>In this lab we will be using the package <code>QuantRRA</code>, which is specifically developed for rapid risk assessment in R. The function <code>SampleDist()</code> support multiple distributions such as: Normal, binomial, uniform, pert, among others. The function requires two arguments:</p>
+<ul>
+<li><code>x</code> which is a string (text) of the distribution and its parameters.<br />
+</li>
+<li><code>n</code> the number of observations we will sample.</li>
+</ul>
+<pre class="r"><code>n &lt;- 100 # number of observations
+d &lt;- &#39;Normal(5, 0.12)&#39; # Distribution to sample
+
+x &lt;- SampleDist(x = d, n = n) # Function to sample the distribution
+
+# We can use the function plotDist() from the package QuantRRA to get a more familiar output:
+plotDist(x, # the values sampled
+         main = &#39;Distribution of x&#39;) # A title for our plot</code></pre>
+<p><img src="224_Lab7_files/figure-html/QuantRRA%20distribution%20sampling-1.png" width="672" /></p>
+<!-- ## Truncation -->
+<!-- ## Fitting data -->
+</div>
+<div id="the-main-function" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> The main function</h2>
+<p>Now that we covered the basics of <code>QuantRRA</code>, we will create our first model. The main function <code>RRA()</code> requires two arguments:</p>
+<ul>
+<li><strong>M</strong>, the model file</li>
+<li><strong>n</strong> number of simulations.</li>
+</ul>
+<p>Lets see an example of a pre-made model file. The following model was based on a risk assessment performed by the OIRSA (<em>Organismo Internacional Regional de Sanidad Agropecuaria</em>) for the introduction of ASF into the countries that are part of OIRSA, you can read more about this report in <a href="https://www.oirsa.org/contenido/2020/AR_PPA_Edición%20revisada%2001_07_20.pdf">this link</a>. The model estimates the number of introduction events from imported animal products swill feeding in a given year.</p>
+<p>To represent the model we must identify the inputs and the outputs we want to calculate. The following figure was adapted from the report by OIRSA</p>
+<p><img src ="../img/OIRSAMODEL.png" style="width:100%;float:center"></p>
+<p>Lets have a look of how we would represent this in R. This model was adapted and its contained in the package, to access the model file use the following code:</p>
+<pre class="r"><code>QuantRRA::OIRSA_M[, 1:6]</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["label"],"name":[2],"type":["chr"],"align":["left"]},{"label":["type"],"name":[3],"type":["chr"],"align":["left"]},{"label":["level"],"name":[4],"type":["int"],"align":["right"]},{"label":["distribution"],"name":[5],"type":["chr"],"align":["left"]},{"label":["formula"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"P1","2":"Prevalence","3":"In","4":"1","5":"Pert(0.1, 0.54, 0.75)","6":"NA"},{"1":"P2","2":"Survival","3":"In","4":"1","5":"Pert(0.01, 0.1, 0.6)","6":"NA"},{"1":"P3","2":"Detection","3":"In","4":"1","5":"Pert(0.1, 0.25, 0.55)","6":"NA"},{"1":"P4","2":"Introduction","3":"Out","4":"2","5":"NA","6":"P1*P2*P3"},{"1":"R1","2":"Swill feeding","3":"In","4":"1","5":"Pert(0.1, 0.8, 0.95)","6":"NA"},{"1":"R2","2":"Food contamination","3":"In","4":"1","5":"Pert(0.1, 0.55, 0.96)","6":"NA"},{"1":"R3","2":"Ingestion prob","3":"Out","4":"2","5":"NA","6":"R1*R2"},{"1":"X","2":"Infection Probability","3":"Out","4":"3","5":"NA","6":"P4*R3"},{"1":"H1","2":"Airport introduction","3":"In","4":"1","5":"Pert(0, 32, 160)","6":"NA"},{"1":"H2","2":"Seaports intro","3":"In","4":"1","5":"Pert(0, 22, 90)","6":"NA"},{"1":"Z","2":"Total Introductions","3":"Out","4":"2","5":"NA","6":"H1+H2"},{"1":"P","2":"Total risk","3":"Out","4":"4","5":"NA","6":"X*Z"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The model file (<strong>M</strong>) must be a data.frame where each of the rows is a parameter and the columns are the following:</p>
+<ul>
+<li><strong>id</strong>, Unique identifier for the parameter. Use short names with no special characters or spaces starting with a letter, i.e. <em>I1</em>, <em>P3</em>, etc…</li>
+<li><strong>label</strong> Name of the parameter.</li>
+<li><strong>type</strong> If its an input (In) or output (Out) parameter. Input parameters must have a distribution specified, otherwise <em>NA</em>; Output parameters must have a formula specified, <em>NA</em> otherwise</li>
+<li><strong>level</strong> Hierarchy level of the parameter, This will determine the order in which the output parameters will be calculated.</li>
+<li><strong>distribution</strong> Distribution for the input parameters, must follow the specification of the <code>SampleDist()</code> function from <code>QuantRRA</code>, if the parameter is an output, must be <em>NA</em>.<br />
+</li>
+<li><strong>formula</strong> Formula used to calculate the Out parameters, the formula must include other parameters from lower hierarchy levels. The formula con use any operators such as multiplication (*), sum (+), substraction (-), exponential (^), division(/), etc…</li>
+</ul>
+<p>When we use the function <code>RRA()</code> on the model file, we will calculate the outcome <em>n</em> times based on the distributions specified:</p>
+<pre class="r"><code># Save the model file to an object
+M &lt;- QuantRRA::OIRSA_M
+# Run the model 5000 times
+Mo &lt;- RRA(M = M, nsim = 5000)
+# Visualize the results:
+plotDist(Mo$P)</code></pre>
+<p><img src="224_Lab7_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The result of this is a table with the distributions sampled for the inputs, and the ones calculated for the outputs. Based on the results, we can estimate the probability that the number of introduction events will be more than 1:</p>
+<pre class="r"><code>sum(Mo$P &gt; 1) / length(Mo$P)</code></pre>
+<pre><code>## [1] 0.2124</code></pre>
+</div>
+<div id="sensitivity-analysis" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Sensitivity analysis</h2>
+<p>We can perform sensitivity analysis on the model to identify the most relevant parameters and explore the parameters sample space, for this we can use the function <code>RFCART()</code> from the <code>QuantRRA</code> package. The function uses random forest to estimate the relative importance of the parameters, and classification and regression trees to visualize the interactions between the parameters sampled. The function requires 3 main arguments:</p>
+<ul>
+<li><em>data</em>: Our results table from the model.<br />
+</li>
+<li><em>formula</em> A formula that contains the names of the outcome analyzed and the parameters.<br />
+</li>
+<li><em>tree</em>: we can specify if we want an <em>interactive</em> or <em>static</em> visualization for our tree.</li>
+</ul>
+<pre class="r"><code># First we specify the formula:
+f &lt;- P ~ P1 + P2 + P3 + R1 + R2 + H1 + H2
+# Then we use the function with our results
+SA &lt;- RFCART(data = Mo, f = f, tree = &#39;interactive&#39;)
+# The results contain 3 objects:
+SA$VarianceExp # The variance explained by our parameters</code></pre>
+<pre><code>## [1] 84.61923</code></pre>
+<pre class="r"><code>SA$RelImport # The relative importance of our parameters</code></pre>
+<p><img src="224_Lab7_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>SA$RT # The classification and regression tree</code></pre>
+<div id="htmlwidget-5d3f5be4fa8bdf209e6a" style="width:100%;height:600px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5d3f5be4fa8bdf209e6a">{"x":{"nodes":{"id":[1,2,4,5,10,11,22,23,46,47,3,6,12,24,25,13,26,27,7,14,15,30,60,61,31,62,124,125,63],"label":["P2","P2","0.249","H1","0.458","R2","0.676","P3","0.944","1.687","H1","P3","R2","0.633","1.022","H2","1.061","1.917","R2","1.089","P3","P2","1.401","2.357","P3","R1","1.977","3.081","4.844"],"level":[1,2,3,3,4,4,5,5,6,6,2,3,4,5,5,4,5,5,3,4,4,5,6,6,5,6,7,7,6],"color":["#F1B8C2","#F1B8C2","#E6E0F8","#E1C1A1","#E1D5F4","#BECC9B","#DDCBF1","#96D4B5","#D7BEED","#C89BE1","#E1C1A1","#96D4B5","#BECC9B","#DECDF2","#D6BAEC","#8DD2D8","#D5B9EB","#C490DE","#BECC9B","#D5B7EB","#96D4B5","#F1B8C2","#CEA8E6","#BB7BD7","#96D4B5","#B4C7ED","#C38DDD","#AC58CC","#8904B1"],"value":[5000,3304,1507,1797,1054,743,521,222,143,79,1696,1018,776,499,277,242,172,70,678,315,363,260,206,54,103,94,39,55,9],"shape":["dot","dot","square","dot","square","dot","square","dot","square","square","dot","dot","dot","square","square","dot","square","square","dot","square","dot","dot","square","square","dot","dot","square","square","square"],"title":["<div style=\"text-align:center;\">N : <b>100%<\/b> (5000)<br>Complexity : <b>0.225<\/b><br>Mean : <b>0.689<\/b><br>Variance : <b>0.504<\/b><\/div>","<div style=\"text-align:center;\">N : <b>66.1%<\/b> (3304)<br>Complexity : <b>0.043<\/b><br>Mean : <b>0.447<\/b><br>Variance : <b>0.177<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> < 0.199<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>30.1%<\/b> (1507)<br>Complexity : <b>0.004<\/b><br>Mean : <b>0.249<\/b><br>Variance : <b>0.047<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> < 0.101<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>35.9%<\/b> (1797)<br>Complexity : <b>0.024<\/b><br>Mean : <b>0.614<\/b><br>Variance : <b>0.225<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.101 <= <b>P2<\/b> < 0.199<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>21.1%<\/b> (1054)<br>Complexity : <b>0.006<\/b><br>Mean : <b>0.458<\/b><br>Variance : <b>0.103<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.101 <= <b>P2<\/b> < 0.199<br><b> H1 <\/b> < 52.709<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>14.9%<\/b> (743)<br>Complexity : <b>0.017<\/b><br>Mean : <b>0.835<\/b><br>Variance : <b>0.315<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.101 <= <b>P2<\/b> < 0.199<br><b> H1 <\/b> >= 52.709<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>10.4%<\/b> (521)<br>Complexity : <b>0.005<\/b><br>Mean : <b>0.676<\/b><br>Variance : <b>0.172<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.101 <= <b>P2<\/b> < 0.199<br><b> H1 <\/b> >= 52.709<br><b> R2 <\/b> < 0.621<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>4.4%<\/b> (222)<br>Complexity : <b>0.011<\/b><br>Mean : <b>1.208<\/b><br>Variance : <b>0.455<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.101 <= <b>P2<\/b> < 0.199<br><b> H1 <\/b> >= 52.709<br><b> R2 <\/b> >= 0.621<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>2.9%<\/b> (143)<br>Complexity : <b>0.002<\/b><br>Mean : <b>0.944<\/b><br>Variance : <b>0.193<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.101 <= <b>P2<\/b> < 0.199<br><b> H1 <\/b> >= 52.709<br><b> R2 <\/b> >= 0.621<br><b> P3 <\/b> < 0.325<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>1.6%<\/b> (79)<br>Complexity : <b>0.008<\/b><br>Mean : <b>1.687<\/b><br>Variance : <b>0.579<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.101 <= <b>P2<\/b> < 0.199<br><b> H1 <\/b> >= 52.709<br><b> R2 <\/b> >= 0.621<br><b> P3 <\/b> >= 0.325<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>33.9%<\/b> (1696)<br>Complexity : <b>0.068<\/b><br>Mean : <b>1.158<\/b><br>Variance : <b>0.808<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>20.4%<\/b> (1018)<br>Complexity : <b>0.021<\/b><br>Mean : <b>0.899<\/b><br>Variance : <b>0.416<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> < 52.365<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>15.5%<\/b> (776)<br>Complexity : <b>0.011<\/b><br>Mean : <b>0.772<\/b><br>Variance : <b>0.243<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> < 52.365<br><b> P3 <\/b> < 0.339<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>10%<\/b> (499)<br>Complexity : <b>0.004<\/b><br>Mean : <b>0.633<\/b><br>Variance : <b>0.138<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> < 52.365<br><b> P3 <\/b> < 0.339<br><b> R2 <\/b> < 0.598<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>5.5%<\/b> (277)<br>Complexity : <b>0.006<\/b><br>Mean : <b>1.022<\/b><br>Variance : <b>0.336<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> < 52.365<br><b> P3 <\/b> < 0.339<br><b> R2 <\/b> >= 0.598<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>4.8%<\/b> (242)<br>Complexity : <b>0.014<\/b><br>Mean : <b>1.309<\/b><br>Variance : <b>0.753<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> < 52.365<br><b> P3 <\/b> >= 0.339<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>3.4%<\/b> (172)<br>Complexity : <b>0.005<\/b><br>Mean : <b>1.061<\/b><br>Variance : <b>0.365<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> < 52.365<br><b> P3 <\/b> >= 0.339<br><b> H2 <\/b> < 39.634<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>1.4%<\/b> (70)<br>Complexity : <b>0.009<\/b><br>Mean : <b>1.917<\/b><br>Variance : <b>1.196<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> < 52.365<br><b> P3 <\/b> >= 0.339<br><b> H2 <\/b> >= 39.634<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>13.6%<\/b> (678)<br>Complexity : <b>0.049<\/b><br>Mean : <b>1.547<\/b><br>Variance : <b>1.145<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> >= 52.365<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>6.3%<\/b> (315)<br>Complexity : <b>0.009<\/b><br>Mean : <b>1.089<\/b><br>Variance : <b>0.441<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> < 0.531<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>7.3%<\/b> (363)<br>Complexity : <b>0.043<\/b><br>Mean : <b>1.945<\/b><br>Variance : <b>1.417<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> >= 0.531<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>5.2%<\/b> (260)<br>Complexity : <b>0.016<\/b><br>Mean : <b>1.6<\/b><br>Variance : <b>0.802<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> >= 0.531<br><b> P3 <\/b> < 0.317<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>4.1%<\/b> (206)<br>Complexity : <b>0.008<\/b><br>Mean : <b>1.401<\/b><br>Variance : <b>0.524<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.199 <= <b>P2<\/b> < 0.342<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> >= 0.531<br><b> P3 <\/b> < 0.317<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>1.1%<\/b> (54)<br>Complexity : <b>0.009<\/b><br>Mean : <b>2.357<\/b><br>Variance : <b>1.153<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.342<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> >= 0.531<br><b> P3 <\/b> < 0.317<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>2.1%<\/b> (103)<br>Complexity : <b>0.016<\/b><br>Mean : <b>2.817<\/b><br>Variance : <b>1.921<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> >= 0.531<br><b> P3 <\/b> >= 0.317<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>1.9%<\/b> (94)<br>Complexity : <b>0.011<\/b><br>Mean : <b>2.623<\/b><br>Variance : <b>1.342<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> >= 0.531<br><b>  <\/b> 0.317 <= <b>P3<\/b> < 0.459<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>0.8%<\/b> (39)<br>Complexity : <b>0.005<\/b><br>Mean : <b>1.977<\/b><br>Variance : <b>0.68<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> >= 0.531<br><b>  <\/b> 0.317 <= <b>P3<\/b> < 0.459<br><b> R1 <\/b> < 0.685<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>1.1%<\/b> (55)<br>Complexity : <b>0.007<\/b><br>Mean : <b>3.081<\/b><br>Variance : <b>1.318<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> >= 0.531<br><b>  <\/b> 0.317 <= <b>P3<\/b> < 0.459<br><b> R1 <\/b> >= 0.685<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>0.2%<\/b> (9)<br>Complexity : <b>0.01<\/b><br>Mean : <b>4.844<\/b><br>Variance : <b>3.826<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> P2 <\/b> >= 0.199<br><b> H1 <\/b> >= 52.365<br><b> R2 <\/b> >= 0.531<br><b> P3 <\/b> >= 0.459<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>"],"fixed":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],"colorClust":["#DDCAF1","#E1D6F4","#E6E0F8","#DECEF2","#E1D5F4","#DAC3EE","#DDCBF1","#D2B2E9","#D7BEED","#C89BE1","#D3B4E9","#D8C0ED","#DBC6EF","#DECDF2","#D6BAEC","#D0ADE7","#D5B9EB","#C490DE","#CBA1E3","#D5B7EB","#C38EDD","#CA9FE3","#CEA8E6","#BB7BD7","#B265D0","#B56ED3","#C38DDD","#AC58CC","#8904B1"],"labelClust":[0.689,0.447,0.249,0.614,0.458,0.835,0.676,1.208,0.944,1.687,1.158,0.899,0.772,0.633,1.022,1.309,1.061,1.917,1.547,1.089,1.945,1.6,1.401,2.357,2.817,2.623,1.977,3.081,4.844],"Leaf":[0,0,1,0,1,0,1,0,1,1,0,0,0,1,1,0,1,1,0,1,0,0,1,1,0,0,1,1,1],"font.size":[16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],"scaling.min":[22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5],"scaling.max":[22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5]},"edges":{"id":["edge1","edge2","edge3","edge4","edge5","edge6","edge7","edge8","edge9","edge10","edge11","edge12","edge13","edge14","edge15","edge16","edge17","edge18","edge19","edge20","edge21","edge22","edge23","edge24","edge25","edge26","edge27","edge28"],"from":[1,2,2,5,5,11,11,23,23,1,3,6,12,12,6,13,13,3,7,7,15,30,30,15,31,62,62,31],"to":[2,4,5,10,11,22,23,46,47,3,6,12,24,25,13,26,27,7,14,15,30,60,61,31,62,124,125,63],"label":["< 0.199","< 0.101",">= 0.101","< 52.709",">= 52.709","< 0.621",">= 0.621","< 0.325",">= 0.325",">= 0.199","< 52.365","< 0.339","< 0.598",">= 0.598",">= 0.339","< 39.634",">= 39.634",">= 52.365","< 0.531",">= 0.531","< 0.317","< 0.342",">= 0.342",">= 0.317","< 0.459","< 0.685",">= 0.685",">= 0.459"],"value":[3304,1507,1797,1054,743,521,222,143,79,1696,1018,776,499,277,242,172,70,678,315,363,260,206,54,103,94,39,55,9],"title":["<div style=\"text-align:center;\"><b>P2<\/b><\/div><div style=\"text-align:center;\"><0.199<\/div>","<div style=\"text-align:center;\"><b>P2<\/b><\/div><div style=\"text-align:center;\"><0.101<\/div>","<div style=\"text-align:center;\"><b>P2<\/b><\/div><div style=\"text-align:center;\">>=0.101<\/div>","<div style=\"text-align:center;\"><b>H1<\/b><\/div><div style=\"text-align:center;\"><52.709<\/div>","<div style=\"text-align:center;\"><b>H1<\/b><\/div><div style=\"text-align:center;\">>=52.709<\/div>","<div style=\"text-align:center;\"><b>R2<\/b><\/div><div style=\"text-align:center;\"><0.621<\/div>","<div style=\"text-align:center;\"><b>R2<\/b><\/div><div style=\"text-align:center;\">>=0.621<\/div>","<div style=\"text-align:center;\"><b>P3<\/b><\/div><div style=\"text-align:center;\"><0.325<\/div>","<div style=\"text-align:center;\"><b>P3<\/b><\/div><div style=\"text-align:center;\">>=0.325<\/div>","<div style=\"text-align:center;\"><b>P2<\/b><\/div><div style=\"text-align:center;\">>=0.199<\/div>","<div style=\"text-align:center;\"><b>H1<\/b><\/div><div style=\"text-align:center;\"><52.365<\/div>","<div style=\"text-align:center;\"><b>P3<\/b><\/div><div style=\"text-align:center;\"><0.339<\/div>","<div style=\"text-align:center;\"><b>R2<\/b><\/div><div style=\"text-align:center;\"><0.598<\/div>","<div style=\"text-align:center;\"><b>R2<\/b><\/div><div style=\"text-align:center;\">>=0.598<\/div>","<div style=\"text-align:center;\"><b>P3<\/b><\/div><div style=\"text-align:center;\">>=0.339<\/div>","<div style=\"text-align:center;\"><b>H2<\/b><\/div><div style=\"text-align:center;\"><39.634<\/div>","<div style=\"text-align:center;\"><b>H2<\/b><\/div><div style=\"text-align:center;\">>=39.634<\/div>","<div style=\"text-align:center;\"><b>H1<\/b><\/div><div style=\"text-align:center;\">>=52.365<\/div>","<div style=\"text-align:center;\"><b>R2<\/b><\/div><div style=\"text-align:center;\"><0.531<\/div>","<div style=\"text-align:center;\"><b>R2<\/b><\/div><div style=\"text-align:center;\">>=0.531<\/div>","<div style=\"text-align:center;\"><b>P3<\/b><\/div><div style=\"text-align:center;\"><0.317<\/div>","<div style=\"text-align:center;\"><b>P2<\/b><\/div><div style=\"text-align:center;\"><0.342<\/div>","<div style=\"text-align:center;\"><b>P2<\/b><\/div><div style=\"text-align:center;\">>=0.342<\/div>","<div style=\"text-align:center;\"><b>P3<\/b><\/div><div style=\"text-align:center;\">>=0.317<\/div>","<div style=\"text-align:center;\"><b>P3<\/b><\/div><div style=\"text-align:center;\"><0.459<\/div>","<div style=\"text-align:center;\"><b>R1<\/b><\/div><div style=\"text-align:center;\"><0.685<\/div>","<div style=\"text-align:center;\"><b>R1<\/b><\/div><div style=\"text-align:center;\">>=0.685<\/div>","<div style=\"text-align:center;\"><b>P3<\/b><\/div><div style=\"text-align:center;\">>=0.459<\/div>"],"color":["#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7"],"font.size":[14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14],"font.align":["horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal"],"smooth.enabled":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],"smooth.type":["cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier"],"smooth.roundness":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"hierarchical":{"enabled":true,"direction":"UD"}},"interaction":{"dragNodes":false,"selectConnectedEdges":false,"tooltipDelay":500,"zoomSpeed":1},"edges":{"scaling":{"label":{"enabled":false}}}},"groups":null,"width":"100%","height":"600px","idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;"},"footer":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;"},"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":50000,"to":0},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":true,"resetHighlight":true,"clusterOptions":{"fixed":true,"physics":false},"keepCoord":true,"labelSuffix":"(cluster)"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;\n                      white-space: nowrap;\n                      font-family: cursive;font-size:12px;font-color:purple;background-color: #E6E6E6;\n                      border-radius: 15px;","OnceEvents":{"stabilized":"function() { \n        this.setOptions({layout:{hierarchical:false}, physics:{solver:'barnesHut', enabled:true, stabilization : false}, nodes : {physics : false, fixed : true}});\n    }"},"legend":{"width":0.1,"useGroups":false,"position":"left","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["H1","H2","P2","P3","R1","R2"],"color":["#E1C1A1","#8DD2D8","#F1B8C2","#96D4B5","#B4C7ED","#BECC9B"],"shape":["dot","dot","dot","dot","dot","dot"],"size":[22,22,22,22,22,22],"Leaf":[0,0,0,0,0,0],"font.size":[16,16,16,16,16,16],"id":[10000,10001,10002,10003,10004,10005]},"nodesToDataframe":true},"tree":{"updateShape":true,"shapeVar":"dot","shapeY":"square","colorVar":{"variable":["P2","H1","R2","P3","H2","R1"],"color":["#F1B8C2","#E1C1A1","#BECC9B","#96D4B5","#8DD2D8","#B4C7ED"]},"colorY":{"colRamp":["function (x) ","roundcolor(cbind(palette[[1L]](x), palette[[2L]](x), palette[[3L]](x), ","    if (alpha) palette[[4L]](x))) * 255"],"colorTerm":["#DDCAF1","#E1D6F4","#E6E0F8","#DECEF2","#E1D5F4","#DAC3EE","#DDCBF1","#D2B2E9","#D7BEED","#C89BE1","#D3B4E9","#D8C0ED","#DBC6EF","#DECDF2","#D6BAEC","#D0ADE7","#D5B9EB","#C490DE","#CBA1E3","#D5B7EB","#C38EDD","#CA9FE3","#CEA8E6","#BB7BD7","#B265D0","#B56ED3","#C38DDD","#AC58CC","#8904B1"],"colorY":["#E6E0F8","#8904B1"],"vardecidedClust":[0.689,0.447,0.249,0.614,0.458,0.835,0.676,1.208,0.944,1.687,1.158,0.899,0.772,0.633,1.022,1.309,1.061,1.917,1.547,1.089,1.945,1.6,1.401,2.357,2.817,2.623,1.977,3.081,4.844]}},"export":{"type":"png","css":"float:right;-webkit-border-radius: 10;\n                  -moz-border-radius: 10;\n                  border-radius: 10px;\n                  font-family: Arial;\n                  color: #ffffff;\n                  font-size: 12px;\n                  background: #090a0a;\n                  padding: 4px 8px 4px 4px;\n                  text-decoration: none;","background":"#fff","name":"network.png","label":"Export as png"}},"evals":["OnceEvents.stabilized"],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="case-study-rabies-in-mexico" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Case study: Rabies in Mexico</h1>
+<p>Now we will be using a model to estimating the risk of rabies transmission from dogs to humans trough bite aggression. We will use the data set for the rabies vaccination program in Mexico. This data set contains the estimated dog and human population per state, number of reported dog bites, and the vaccination coverage for the years 2016 to 2020.</p>
+<div id="data-preparation" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Data preparation</h2>
+<pre class="r"><code># Load the rabies data set
+rb &lt;- QuantRRA::.
+
+# lets have a look at the first observations
+head(rb)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["year"],"name":[1],"type":["int"],"align":["right"]},{"label":["State"],"name":[2],"type":["chr"],"align":["left"]},{"label":["HumanPop"],"name":[3],"type":["int"],"align":["right"]},{"label":["DogPop"],"name":[4],"type":["int"],"align":["right"]},{"label":["Bites"],"name":[5],"type":["int"],"align":["right"]},{"label":["VaccinationCov"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"2016","2":"AGUASCALIENTES","3":"830762","4":"207178","5":"472","6":"0.9470262","_rn_":"1"},{"1":"2016","2":"BAJACALIFORNIA","3":"2192229","4":"349926","5":"807","6":"0.9212948","_rn_":"2"},{"1":"2016","2":"BAJACALIFORNIASUR","3":"475014","4":"110438","5":"240","6":"0.9053768","_rn_":"3"},{"1":"2016","2":"CAMPECHE","3":"591801","4":"77553","5":"491","6":"0.9822960","_rn_":"4"},{"1":"2016","2":"COAHUILADEZARAGOZA","3":"1915633","4":"364392","5":"3466","6":"0.9632813","_rn_":"5"},{"1":"2016","2":"COLIMA","3":"473790","4":"81469","5":"299","6":"0.9719648","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>We will use the data set to estimate the median, min, and max of the variables, and then use this to describe Pert distributions to use in further analysis.</p>
+<pre class="r"><code># We need to format the data 
+rbt &lt;- rb %&gt;% # The rabies data set
+  group_by(State) %&gt;%  # We will group our observations by state
+  # Next we will calculate the median, min and max for each of our variables
+  summarise_at(.vars = c(&#39;HumanPop&#39;, &#39;DogPop&#39;, &#39;Bites&#39;, &#39;VaccinationCov&#39;), # These are the variables
+               .funs = c(m = ~median(., na.rm = T), min = ~min(., na.rm = T), max = ~max(., na.rm = T))) %&gt;% # These are the functions 
+  # Next we will create new columns to specify the distributions we will use for the RRA
+  mutate(DogPop = paste0(&#39;Pert(&#39;, DogPop_min, &#39;, &#39;, DogPop_m, &#39;, &#39;, DogPop_max, &#39;)&#39;),
+         HumanPop = paste0(&#39;Pert(&#39;, HumanPop_min, &#39;, &#39;, HumanPop_m, &#39;, &#39;, HumanPop_max, &#39;)&#39;),
+         Bites = paste0(&#39;Pert(&#39;, Bites_min, &#39;, &#39;, Bites_m, &#39;, &#39;, Bites_max, &#39;)&#39;),
+         VaccinationCov = paste0(&#39;Pert(&#39;, VaccinationCov_min, &#39;, &#39;, VaccinationCov_m, &#39;, &#39;, VaccinationCov_max, &#39;)&#39;))
+
+rbt</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["State"],"name":[1],"type":["chr"],"align":["left"]},{"label":["HumanPop_m"],"name":[2],"type":["int"],"align":["right"]},{"label":["DogPop_m"],"name":[3],"type":["int"],"align":["right"]},{"label":["Bites_m"],"name":[4],"type":["int"],"align":["right"]},{"label":["VaccinationCov_m"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["HumanPop_min"],"name":[6],"type":["int"],"align":["right"]},{"label":["DogPop_min"],"name":[7],"type":["int"],"align":["right"]},{"label":["Bites_min"],"name":[8],"type":["int"],"align":["right"]},{"label":["VaccinationCov_min"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["HumanPop_max"],"name":[10],"type":["int"],"align":["right"]},{"label":["DogPop_max"],"name":[11],"type":["int"],"align":["right"]},{"label":["Bites_max"],"name":[12],"type":["int"],"align":["right"]},{"label":["VaccinationCov_max"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["DogPop"],"name":[14],"type":["chr"],"align":["left"]},{"label":["HumanPop"],"name":[15],"type":["chr"],"align":["left"]},{"label":["Bites"],"name":[16],"type":["chr"],"align":["left"]},{"label":["VaccinationCov"],"name":[17],"type":["chr"],"align":["left"]}],"data":[{"1":"AGUASCALIENTES","2":"872284","3":"229628","4":"359","5":"0.9463426","6":"830762","7":"207178","8":"187","9":"0.9364492","10":"913173","11":"233325","12":"472","13":"0.9482990","14":"Pert(207178, 229628, 233325)","15":"Pert(830762, 872284, 913173)","16":"Pert(187, 359, 472)","17":"Pert(0.936449158898532, 0.94634257999594, 0.948298987928301)"},{"1":"BAJACALIFORNIA","2":"2304488","3":"304764","4":"689","5":"0.9117448","6":"2192229","7":"213802","8":"367","9":"0.9087063","10":"2414741","11":"349926","12":"807","13":"0.9212948","14":"Pert(213802, 304764, 349926)","15":"Pert(2192229, 2304488, 2414741)","16":"Pert(367, 689, 807)","17":"Pert(0.9087063215014, 0.911744825504325, 0.9212947880409)"},{"1":"BAJACALIFORNIASUR","2":"503531","3":"99893","4":"240","5":"0.9211147","6":"475014","7":"98523","8":"166","9":"0.9051797","10":"531689","11":"110438","12":"291","13":"0.9611461","14":"Pert(98523, 99893, 110438)","15":"Pert(475014, 503531, 531689)","16":"Pert(166, 240, 291)","17":"Pert(0.90517968463513, 0.921114675139385, 0.961146128315216)"},{"1":"CAMPECHE","2":"621328","3":"163240","4":"376","5":"0.9845926","6":"591801","7":"77553","8":"188","9":"0.9704758","10":"650365","11":"178096","12":"491","13":"0.9934743","14":"Pert(77553, 163240, 178096)","15":"Pert(591801, 621328, 650365)","16":"Pert(188, 376, 491)","17":"Pert(0.970475752513228, 0.984592579283083, 0.993474269718067)"},{"1":"CHIAPAS","2":"3201316","3":"344045","4":"1247","5":"0.9916116","6":"3060969","7":"47769","8":"854","9":"0.9731625","10":"3339960","11":"460400","12":"1412","13":"0.9980045","14":"Pert(47769, 344045, 460400)","15":"Pert(3060969, 3201316, 3339960)","16":"Pert(854, 1247, 1412)","17":"Pert(0.973162511252067, 0.99161156244096, 0.998004471184864)"},{"1":"CHIHUAHUA","2":"2397021","3":"389094","4":"1378","5":"0.9588566","6":"2310452","7":"213789","8":"721","9":"0.9473562","10":"2481414","11":"404072","12":"1539","13":"0.9624522","14":"Pert(213789, 389094, 404072)","15":"Pert(2310452, 2397021, 2481414)","16":"Pert(721, 1378, 1539)","17":"Pert(0.947356227022293, 0.958856629667569, 0.962452236235126)"},{"1":"CIUDADDEMEXICO","2":"6669505","3":"1008103","4":"9370","5":"0.9640650","6":"6581634","7":"573999","8":"3382","9":"0.9554346","10":"6742158","11":"1140122","12":"9811","13":"0.9756480","14":"Pert(573999, 1008103, 1140122)","15":"Pert(6581634, 6669505, 6742158)","16":"Pert(3382, 9370, 9811)","17":"Pert(0.955434606655811, 0.964065038485099, 0.975648041198678)"},{"1":"COAHUILADEZARAGOZA","2":"1992735","3":"364392","4":"2330","5":"0.9632813","6":"1915633","7":"333339","8":"1788","9":"0.9538548","10":"2068601","11":"420909","12":"3466","13":"0.9708858","14":"Pert(333339, 364392, 420909)","15":"Pert(1915633, 1992735, 2068601)","16":"Pert(1788, 2330, 3466)","17":"Pert(0.953854784468664, 0.963281301455575, 0.970885843068715)"},{"1":"COLIMA","2":"496085","3":"79303","4":"339","5":"0.9883359","6":"473790","7":"78264","8":"299","9":"0.9719648","10":"517885","11":"115513","12":"368","13":"0.9918184","14":"Pert(78264, 79303, 115513)","15":"Pert(473790, 496085, 517885)","16":"Pert(299, 339, 368)","17":"Pert(0.971964796425634, 0.988335876322459, 0.991818401598147)"},{"1":"DURANGO","2":"1143753","3":"232448","4":"2723","5":"0.9548233","6":"1104617","7":"193861","8":"1648","9":"0.9347886","10":"1181819","11":"300395","12":"3900","13":"0.9630520","14":"Pert(193861, 232448, 300395)","15":"Pert(1104617, 1143753, 1181819)","16":"Pert(1648, 2723, 3900)","17":"Pert(0.934788612666382, 0.954823301231295, 0.963051981557616)"},{"1":"GUANAJUATO","2":"3834581","3":"995464","4":"2582","5":"0.9214227","6":"3702842","7":"949229","8":"1775","9":"0.9207596","10":"3959716","11":"1004125","12":"3002","13":"0.9480505","14":"Pert(949229, 995464, 1004125)","15":"Pert(3702842, 3834581, 3959716)","16":"Pert(1775, 2582, 3002)","17":"Pert(0.920759565388603, 0.921422677473303, 0.948050470434426)"},{"1":"GUERRERO","2":"2201609","3":"481612","4":"1977","5":"0.9907558","6":"2147724","7":"305509","8":"653","9":"0.9864750","10":"2252507","11":"551567","12":"2520","13":"0.9941331","14":"Pert(305509, 481612, 551567)","15":"Pert(2147724, 2201609, 2252507)","16":"Pert(653, 1977, 2520)","17":"Pert(0.98647503019551, 0.990755784003487, 0.994133079027571)"},{"1":"HIDALGO","2":"1927382","3":"730859","4":"2877","5":"0.9422668","6":"1855898","7":"629803","8":"2446","9":"0.9373477","10":"1997692","11":"775037","12":"3369","13":"0.9700795","14":"Pert(629803, 730859, 775037)","15":"Pert(1855898, 1927382, 1997692)","16":"Pert(2446, 2877, 3369)","17":"Pert(0.937347696340881, 0.942266757067848, 0.97007953280629)"},{"1":"JALISCO","2":"5280893","3":"712690","4":"3207","5":"0.9443785","6":"5088296","7":"640637","8":"2650","9":"0.9155425","10":"5467526","11":"830195","12":"3971","13":"0.9633836","14":"Pert(640637, 712690, 830195)","15":"Pert(5088296, 5280893, 5467526)","16":"Pert(2650, 3207, 3971)","17":"Pert(0.915542521994135, 0.944378478031764, 0.963383571308243)"},{"1":"MEXICO","2":"11264640","3":"3010259","4":"14059","5":"0.9570856","6":"10837104","7":"2764584","8":"8809","9":"0.9434131","10":"11675784","11":"3040935","12":"14836","13":"0.9728874","14":"Pert(2764584, 3010259, 3040935)","15":"Pert(10837104, 11264640, 11675784)","16":"Pert(8809, 14059, 14836)","17":"Pert(0.943413127870211, 0.957085623758593, 0.972887421760381)"},{"1":"MICHOACANDEOCAMPO","2":"2968283","3":"683516","4":"2049","5":"0.9680193","6":"2888869","7":"563215","8":"1610","9":"0.9610995","10":"3042823","11":"741330","12":"2744","13":"0.9842230","14":"Pert(563215, 683516, 741330)","15":"Pert(2888869, 2968283, 3042823)","16":"Pert(1610, 2049, 2744)","17":"Pert(0.961099534266252, 0.968019317667321, 0.984222950642764)"},{"1":"MORELOS","2":"1321494","3":"182945","4":"1289","5":"0.9786342","6":"1275607","7":"72575","8":"661","9":"0.9077368","10":"1365389","11":"280851","12":"1348","13":"0.9907568","14":"Pert(72575, 182945, 280851)","15":"Pert(1275607, 1321494, 1365389)","16":"Pert(661, 1289, 1348)","17":"Pert(0.907736823975198, 0.978634227202149, 0.990756784826041)"},{"1":"NAYARIT","2":"790355","3":"51942","4":"673","5":"0.9749528","6":"757505","7":"5381","8":"362","9":"0.6792418","10":"822742","11":"78771","12":"930","13":"0.9847094","14":"Pert(5381, 51942, 78771)","15":"Pert(757505, 790355, 822742)","16":"Pert(362, 673, 930)","17":"Pert(0.679241776621446, 0.974952832004929, 0.984709405065777)"},{"1":"NUEVOLEON","2":"3608277","3":"551818","4":"2708","5":"0.9182483","6":"3456093","7":"205547","8":"1673","9":"0.8944475","10":"3758297","11":"571329","12":"3651","13":"0.9340054","14":"Pert(205547, 551818, 571329)","15":"Pert(3456093, 3608277, 3758297)","16":"Pert(1673, 2708, 3651)","17":"Pert(0.894447498625618, 0.918248269942987, 0.934005414828802)"},{"1":"OAXACA","2":"2563532","3":"280740","4":"804","5":"0.9862584","6":"2497674","7":"262123","8":"576","9":"0.9788375","10":"2626639","11":"640211","12":"1264","13":"0.9905874","14":"Pert(262123, 280740, 640211)","15":"Pert(2497674, 2563532, 2626639)","16":"Pert(576, 804, 1264)","17":"Pert(0.978837524954461, 0.986258359625061, 0.990587394705175)"},{"1":"PUEBLA","2":"4039672","3":"1274037","4":"4439","5":"0.9564228","6":"3895521","7":"679632","8":"2206","9":"0.9483689","10":"4180191","11":"1346821","12":"4955","13":"0.9722835","14":"Pert(679632, 1274037, 1346821)","15":"Pert(3895521, 4039672, 4180191)","16":"Pert(2206, 4439, 4955)","17":"Pert(0.948368921596219, 0.95642277265103, 0.972283529910304)"},{"1":"QUERETARO","2":"1409856","3":"262774","4":"783","5":"0.9469422","6":"1332790","7":"253038","8":"589","9":"0.9384991","10":"1485346","11":"285638","12":"988","13":"0.9673488","14":"Pert(253038, 262774, 285638)","15":"Pert(1332790, 1409856, 1485346)","16":"Pert(589, 783, 988)","17":"Pert(0.938499079254161, 0.946942224005432, 0.967348777653949)"},{"1":"QUINTANAROO","2":"1059993","3":"135730","4":"873","5":"0.9814496","6":"992464","7":"82113","8":"485","9":"0.7976447","10":"1126890","11":"140898","12":"1056","13":"0.9904074","14":"Pert(82113, 135730, 140898)","15":"Pert(992464, 1059993, 1126890)","16":"Pert(485, 873, 1056)","17":"Pert(0.797644709120359, 0.981449574569826, 0.99040742650851)"},{"1":"SANLUISPOTOSI","2":"1800140","3":"519814","4":"2400","5":"0.9678904","6":"1745639","7":"81176","8":"1514","9":"0.9090987","10":"1852832","11":"527152","12":"2883","13":"0.9758568","14":"Pert(81176, 519814, 527152)","15":"Pert(1745639, 1800140, 1852832)","16":"Pert(1514, 2400, 2883)","17":"Pert(0.909098748398541, 0.967890370795537, 0.975856761846495)"},{"1":"SINALOA","2":"2026696","3":"240096","4":"485","5":"0.9578678","6":"1959923","7":"225899","8":"229","9":"0.9075745","10":"2091365","11":"262056","12":"686","13":"0.9727616","14":"Pert(225899, 240096, 262056)","15":"Pert(1959923, 2026696, 2091365)","16":"Pert(229, 485, 686)","17":"Pert(0.907574470211915, 0.957867783985102, 0.972761577225287)"},{"1":"SONORA","2":"1952294","3":"342835","4":"2006","5":"0.9194073","6":"1872695","7":"208879","8":"946","9":"0.8961743","10":"2030584","11":"383977","12":"2388","13":"0.9434289","14":"Pert(208879, 342835, 383977)","15":"Pert(1872695, 1952294, 2030584)","16":"Pert(946, 2006, 2388)","17":"Pert(0.896174340168231, 0.919407295054472, 0.943428903293687)"},{"1":"TABASCO","2":"1598963","3":"264775","4":"293","5":"0.9828855","6":"1541001","7":"207347","8":"267","9":"0.9582077","10":"1655144","11":"272050","12":"505","13":"0.9949029","14":"Pert(207347, 264775, 272050)","15":"Pert(1541001, 1598963, 1655144)","16":"Pert(267, 293, 505)","17":"Pert(0.958207677198622, 0.982885498989156, 0.994902917210217)"},{"1":"TAMAULIPAS","2":"2330045","3":"336806","4":"2445","5":"0.9465619","6":"2262282","7":"298150","8":"1408","9":"0.9347677","10":"2396447","11":"344791","12":"2897","13":"0.9538429","14":"Pert(298150, 336806, 344791)","15":"Pert(2262282, 2330045, 2396447)","16":"Pert(1408, 2445, 2897)","17":"Pert(0.934767734361898, 0.946561891932345, 0.953842865032096)"},{"1":"TLAXCALA","2":"855518","3":"330152","4":"668","5":"0.9004584","6":"821321","7":"270189","8":"373","9":"0.8894776","10":"888964","11":"337088","12":"935","13":"0.9243900","14":"Pert(270189, 330152, 337088)","15":"Pert(821321, 855518, 888964)","16":"Pert(373, 668, 935)","17":"Pert(0.889477639088507, 0.900458405259374, 0.924389964062194)"},{"1":"VERACRUZDEIGNACIODELALLAVE","2":"5536297","3":"1245250","4":"3189","5":"0.9933074","6":"5393807","7":"633475","8":"2353","9":"0.9864415","10":"5669609","11":"1348070","12":"3215","13":"0.9941809","14":"Pert(633475, 1245250, 1348070)","15":"Pert(5393807, 5536297, 5669609)","16":"Pert(2353, 3189, 3215)","17":"Pert(0.986441453885315, 0.993307367998394, 0.994180948269375)"},{"1":"YUCATAN","2":"1467729","3":"256341","4":"1651","5":"0.9871265","6":"1410370","7":"205932","8":"903","9":"0.9632396","10":"1523560","11":"331793","12":"2033","13":"0.9966882","14":"Pert(205932, 256341, 331793)","15":"Pert(1410370, 1467729, 1523560)","16":"Pert(903, 1651, 2033)","17":"Pert(0.963239578197929, 0.987126522873828, 0.996688227181788)"},{"1":"ZACATECAS","2":"1019884","3":"274972","4":"421","5":"0.9716547","6":"993044","7":"253955","8":"175","9":"0.9674903","10":"1045634","11":"277470","12":"494","13":"0.9830952","14":"Pert(253955, 274972, 277470)","15":"Pert(993044, 1019884, 1045634)","16":"Pert(175, 421, 494)","17":"Pert(0.967490303400209, 0.97165472010215, 0.983095154447958)"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="planning-the-model." class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Planning the model.</h2>
+<p>Now we will create a model file based on the next scenario tree for the transmission of dog rabies to humans:</p>
+<p><img src ="../img/RabiesTree.png" style="width:100%;float:center"></p>
+<p>We need identify the inputs and outputs, and the relationships between the nodes in our scenario tree. To parametrize our model we will be using the data reported by the vaccination program (such as dog and human population, bite reports, and vaccination coverage) and some theoretical distributions that we can parametrize based on expert opinion or ‘what if?’ scenarios.</p>
+<p>The outputs in the model will be calculated based in the inputs as follows:</p>
+<p><span class="math display">\[
+\begin{aligned}
+P(Contact) = O_1 &amp;= \frac{I_1}{I_2} \\
+P(Bite) = O_2 &amp;= \frac{I_3}{I_1} \\
+P(Infected\ dog) = O_3 &amp;= (1 - I_4) \times I5\\
+P(Transmission) = O_4 &amp;= O_1 \times O_2 \times O_3 \times I_5\\
+\end{aligned}
+\]</span> We can also calculate the estimated number of transmission events in a given year using the following formula:</p>
+<p><span class="math display">\[
+E[Transmission\ events] = O_4 \times I_2
+\]</span> We will create our model file from scratch by defining each of the columns that needs to be present in order to calculate the outputs. We will be calculating the probability of transmission for one of the states in Mexico (Mexico city). Now complete the formulas described for the outputs to be calculated:</p>
+<pre class="r"><code># Get the index for Mexico city:
+state &lt;- which(rbt$State == &#39;CIUDADDEMEXICO&#39;)
+
+# Define the model: 
+M &lt;- data.frame(
+  # First we will create our IDs
+  id = c(&#39;I1&#39;, &#39;I2&#39;, &#39;O1&#39;,
+         &#39;I3&#39;, &#39;O2&#39;,
+         &#39;I4&#39;, &#39;I5&#39;, &#39;O3&#39;,
+         &#39;I6&#39;, &#39;O4&#39;,
+         &#39;E&#39;),
+  # Then we define the names for the nodes
+  label = c(&#39;DogPop&#39;, &#39;HumanPop&#39;, &#39;Contact Probability&#39;,
+            &#39;Bites&#39;, &#39;Bite Probability&#39;,
+            &#39;VaccinationCoverage&#39;, &#39;Prevalence&#39;, &#39;Probability of Infected dog&#39;,
+            &#39;Transmission rate&#39;, &#39;Transmission probability&#39;, 
+            &#39;Expected transmission events&#39;),
+  # Type of node 
+  type = c(&#39;In&#39;, &#39;In&#39;, &#39;Out&#39;,
+           &#39;In&#39;, &#39;Out&#39;,
+           &#39;In&#39;, &#39;In&#39;, &#39;Out&#39;,
+           &#39;In&#39;, &#39;Out&#39;,
+           &#39;Out&#39;),
+  # Hierarchy level
+  level = c(0, 0, 1,
+            0, 1,
+            0, 0, 1,
+            0, 2, 
+            2),
+  # Distributions for the input nodes
+  distribution = c(rbt$DogPop[state], rbt$HumanPop[state], NA,
+                   rbt$Bites[state], NA,
+                   rbt$VaccinationCov[state], &#39;Pert(0.01, 0.05, 0.1)&#39;, NA,
+                   &#39;Pert(0.1, 0.3, 0.5)&#39;, NA,
+                   NA),
+  # Formulas for the output nodes
+  formula = c(NA, NA, &#39;Insert formula here&#39;, # O1 Contact
+              NA, &#39;Formula for O2&#39;, # O2 Bite
+              NA, NA, &#39;Formula&#39;, # O3 infection
+              NA, &#39;Formula&#39;, # O4 Transmission
+              &#39;Formula&#39;)) # E Transmission events</code></pre>
+</div>
+<div id="running-the-model" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Running the model</h2>
+<p>Now we will run 1000 simulations of the model and plot the distribution of the outputs calculated:</p>
+<pre class="r"><code>Mo &lt;- RRA(M = M, nsim = 1000)
+
+plotDist(Mo$O1, main = &#39;Contact probability&#39;) # Contact</code></pre>
+<p><img src="224_Lab7_files/figure-html/Q1-1.png" width="672" /></p>
+<p><strong>Question 1</strong> Plot the distributions of the Probability of aggression, a dog being infected with rabies, the dog-human transmission and the expected number of cases.</p>
+<p><strong>Question 2</strong> Based on the results, what would be the probability that there will be more than 1 transmission events?</p>
+</div>
+<div id="sensitivity-analysis-1" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Sensitivity analysis</h2>
+<p>Now we will run the sensitivity analysis on the model results for the estimated number of transmission events</p>
+<pre class="r"><code>SA &lt;- RFCART(data = Mo, f =  E ~ I1 + I2 + I3 + I4 + I5 + I6, tree = &#39;interactive&#39;)
+
+SA$VarianceExp</code></pre>
+<pre><code>## [1] 95.39612</code></pre>
+<pre class="r"><code>SA$RelImport</code></pre>
+<p><img src="224_Lab7_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>SA$RT</code></pre>
+<div id="htmlwidget-44a68a1f048cec828539" style="width:100%;height:600px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-44a68a1f048cec828539">{"x":{"nodes":{"id":[1,2,4,8,9,5,10,11,3,6,7,14,28,29,15],"label":["I5","I5","I5","0.232","0.475","I5","0.705","0.992","I5","1.393","I5","I3","1.709","2.103","2.616"],"level":[1,2,3,4,4,3,4,4,2,3,3,4,5,5,4],"color":["#F1B8C2","#F1B8C2","#F1B8C2","#E6E0F8","#DCC9F0","#F1B8C2","#D3B4E9","#C899E1","#F1B8C2","#B874D5","#F1B8C2","#B4C7ED","#AC57CC","#9D33C0","#8904B1"],"value":[1000,715,329,180,149,386,221,165,285,174,111,99,52,47,12],"shape":["dot","dot","dot","square","square","dot","square","square","dot","square","dot","dot","square","square","square"],"title":["<div style=\"text-align:center;\">N : <b>100%<\/b> (1000)<br>Complexity : <b>0.642<\/b><br>Mean : <b>0.894<\/b><br>Variance : <b>0.327<\/b><\/div>","<div style=\"text-align:center;\">N : <b>71.5%<\/b> (715)<br>Complexity : <b>0.128<\/b><br>Mean : <b>0.604<\/b><br>Variance : <b>0.092<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> I5 <\/b> < 0.062<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>32.9%<\/b> (329)<br>Complexity : <b>0.015<\/b><br>Mean : <b>0.342<\/b><br>Variance : <b>0.023<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> I5 <\/b> < 0.044<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>18%<\/b> (180)<br>Complexity : <b>0.01<\/b><br>Mean : <b>0.232<\/b><br>Variance : <b>0.008<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> I5 <\/b> < 0.034<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>14.9%<\/b> (149)<br>Complexity : <b>0.01<\/b><br>Mean : <b>0.475<\/b><br>Variance : <b>0.009<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.034 <= <b>I5<\/b> < 0.044<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>38.6%<\/b> (386)<br>Complexity : <b>0.024<\/b><br>Mean : <b>0.828<\/b><br>Variance : <b>0.041<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.044 <= <b>I5<\/b> < 0.062<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>22.1%<\/b> (221)<br>Complexity : <b>0.002<\/b><br>Mean : <b>0.705<\/b><br>Variance : <b>0.016<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.044 <= <b>I5<\/b> < 0.054<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>16.5%<\/b> (165)<br>Complexity : <b>0.006<\/b><br>Mean : <b>0.992<\/b><br>Variance : <b>0.029<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.054 <= <b>I5<\/b> < 0.062<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>28.5%<\/b> (285)<br>Complexity : <b>0.07<\/b><br>Mean : <b>1.619<\/b><br>Variance : <b>0.181<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> I5 <\/b> >= 0.062<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>17.4%<\/b> (174)<br>Complexity : <b>0.009<\/b><br>Mean : <b>1.393<\/b><br>Variance : <b>0.063<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.062 <= <b>I5<\/b> < 0.075<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>11.1%<\/b> (111)<br>Complexity : <b>0.017<\/b><br>Mean : <b>1.974<\/b><br>Variance : <b>0.159<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> I5 <\/b> >= 0.075<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>9.9%<\/b> (99)<br>Complexity : <b>0.012<\/b><br>Mean : <b>1.896<\/b><br>Variance : <b>0.109<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.075 <= <b>I5<\/b> < 0.088<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>5.2%<\/b> (52)<br>Complexity : <b>0.004<\/b><br>Mean : <b>1.709<\/b><br>Variance : <b>0.074<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.075 <= <b>I5<\/b> < 0.088<br><b> I3 <\/b> < 8500.045<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>4.7%<\/b> (47)<br>Complexity : <b>0.01<\/b><br>Mean : <b>2.103<\/b><br>Variance : <b>0.067<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b>  <\/b> 0.075 <= <b>I5<\/b> < 0.088<br><b> I3 <\/b> >= 8500.045<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>1.2%<\/b> (12)<br>Complexity : <b>0.01<\/b><br>Mean : <b>2.616<\/b><br>Variance : <b>0.119<\/b><hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\"  onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> I5 <\/b> >= 0.088<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>"],"fixed":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],"colorClust":["#CCA2E4","#D7BDEC","#E1D5F4","#E6E0F8","#DCC9F0","#CEA9E6","#D3B4E9","#C899E1","#AF60CE","#B874D5","#A23FC4","#A546C6","#AC57CC","#9D33C0","#8904B1"],"labelClust":[0.894,0.604,0.342,0.232,0.475,0.828,0.705,0.992,1.619,1.393,1.974,1.896,1.709,2.103,2.616],"Leaf":[0,0,0,1,1,0,1,1,0,1,0,0,1,1,1],"font.size":[16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],"scaling.min":[22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5],"scaling.max":[22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5,22.5]},"edges":{"id":["edge1","edge2","edge3","edge4","edge5","edge6","edge7","edge8","edge9","edge10","edge11","edge12","edge13","edge14"],"from":[1,2,4,4,2,5,5,1,3,3,7,14,14,7],"to":[2,4,8,9,5,10,11,3,6,7,14,28,29,15],"label":["< 0.062","< 0.044","< 0.034",">= 0.034",">= 0.044","< 0.054",">= 0.054",">= 0.062","< 0.075",">= 0.075","< 0.088","< 8500.045",">= 8500...",">= 0.088"],"value":[715,329,180,149,386,221,165,285,174,111,99,52,47,12],"title":["<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\"><0.062<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\"><0.044<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\"><0.034<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\">>=0.034<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\">>=0.044<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\"><0.054<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\">>=0.054<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\">>=0.062<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\"><0.075<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\">>=0.075<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\"><0.088<\/div>","<div style=\"text-align:center;\"><b>I3<\/b><\/div><div style=\"text-align:center;\"><8500.045<\/div>","<div style=\"text-align:center;\"><b>I3<\/b><\/div><div style=\"text-align:center;\">>=8500.045<\/div>","<div style=\"text-align:center;\"><b>I5<\/b><\/div><div style=\"text-align:center;\">>=0.088<\/div>"],"color":["#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7"],"font.size":[14,14,14,14,14,14,14,14,14,14,14,14,14,14],"font.align":["horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal","horizontal"],"smooth.enabled":[true,true,true,true,true,true,true,true,true,true,true,true,true,true],"smooth.type":["cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier"],"smooth.roundness":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"hierarchical":{"enabled":true,"direction":"UD"}},"interaction":{"dragNodes":false,"selectConnectedEdges":false,"tooltipDelay":500,"zoomSpeed":1},"edges":{"scaling":{"label":{"enabled":false}}}},"groups":null,"width":"100%","height":"600px","idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;"},"footer":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;"},"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":50000,"to":0},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":true,"resetHighlight":true,"clusterOptions":{"fixed":true,"physics":false},"keepCoord":true,"labelSuffix":"(cluster)"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;\n                      white-space: nowrap;\n                      font-family: cursive;font-size:12px;font-color:purple;background-color: #E6E6E6;\n                      border-radius: 15px;","OnceEvents":{"stabilized":"function() { \n        this.setOptions({layout:{hierarchical:false}, physics:{solver:'barnesHut', enabled:true, stabilization : false}, nodes : {physics : false, fixed : true}});\n    }"},"legend":{"width":0.1,"useGroups":false,"position":"left","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["I3","I5"],"color":["#B4C7ED","#F1B8C2"],"shape":["dot","dot"],"size":[22,22],"Leaf":[0,0],"font.size":[16,16],"id":[10000,10001]},"nodesToDataframe":true},"tree":{"updateShape":true,"shapeVar":"dot","shapeY":"square","colorVar":{"variable":["I5","I3"],"color":["#F1B8C2","#B4C7ED"]},"colorY":{"colRamp":["function (x) ","roundcolor(cbind(palette[[1L]](x), palette[[2L]](x), palette[[3L]](x), ","    if (alpha) palette[[4L]](x))) * 255"],"colorTerm":["#CCA2E4","#D7BDEC","#E1D5F4","#E6E0F8","#DCC9F0","#CEA9E6","#D3B4E9","#C899E1","#AF60CE","#B874D5","#A23FC4","#A546C6","#AC57CC","#9D33C0","#8904B1"],"colorY":["#E6E0F8","#8904B1"],"vardecidedClust":[0.894,0.604,0.342,0.232,0.475,0.828,0.705,0.992,1.619,1.393,1.974,1.896,1.709,2.103,2.616]}},"export":{"type":"png","css":"float:right;-webkit-border-radius: 10;\n                  -moz-border-radius: 10;\n                  border-radius: 10px;\n                  font-family: Arial;\n                  color: #ffffff;\n                  font-size: 12px;\n                  background: #090a0a;\n                  padding: 4px 8px 4px 4px;\n                  text-decoration: none;","background":"#fff","name":"network.png","label":"Export as png"}},"evals":["OnceEvents.stabilized"],"jsHooks":[]}</script>
+<p><strong>Question 3</strong> What can you say about the sensitivity of the model? would you say its a good model?</p>
+</div>
+<div id="generating-a-risk-map" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Generating a risk map</h2>
+<p>We can use the function <code>RRA_s()</code> to calculate a risk model stratified by a variable, in this case we will estimate the expected transmission events for the rest of the states in Mexico. The function <code>RRA_s()</code> requires 3 arguments:</p>
+<ul>
+<li><strong>M</strong>, the model file<br />
+</li>
+<li><strong>Tbl</strong>, a table where each row represent a strata, and each column represent the name of strata and the input parameters.<br />
+</li>
+<li><strong>nsim</strong>, number of simulations</li>
+</ul>
+<pre class="r"><code># We will create a table to use as input
+rbts &lt;- rbt %&gt;% 
+  select(State, I1 = DogPop, I2 = HumanPop, I3 = Bites, I4 =VaccinationCov) %&gt;% 
+  mutate(
+         I5 = &#39;Pert(0.01, 0.1, 0.15)&#39;, # Prevalence
+         I6 = &#39;Pert(0.1, 0.3, 0.5)&#39;)  # Transmission
+
+# Run the model for all the states
+rabRR &lt;- QuantRRA::RRA_s(M = M, Tbl = rbts, nsim = 5000)
+
+# Load the spatial shape file for the region
+MxSp &lt;- st_read(system.file(&quot;data/MxSp.shp&quot;, package = &quot;QuantRRA&quot;), quiet = T)
+
+# Plot the risk map
+MxSp %&gt;%  # This is our spatial shape file
+  left_join(rabRR, by = c(&#39;Entidad&#39; = &#39;IDs&#39;)) %&gt;%  # we use left join to join our model results
+  ggplot() + # We call ggplot
+  geom_sf(aes(fill = E_m)) + # We add a layer representing the polygons colored by the variable E
+  scale_fill_gradient(low = &#39;black&#39;, high = &#39;red&#39;) + # set the color scale
+  theme_void() # Theme of the plot</code></pre>
+<p><img src="224_Lab7_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+</div>
+<div id="reporting-the-results" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Reporting the results</h1>
+<p>To submit your assignment you should include:</p>
+<ol style="list-style-type: decimal">
+<li>Plots for the distribution outputs including: Probability of bite aggression, Probability of a Dog being infected, Probability of Dog-Human rabies transmission, and the expected number of transmissions in a given year.<br />
+</li>
+<li>The probability that there will be more than 1 transmission events?<br />
+</li>
+<li>Your opinion about the model sensitivity.</li>
+</ol>
+<hr />
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
