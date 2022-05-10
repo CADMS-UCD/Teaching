@@ -8,14 +8,14 @@ output:
     number_sections: true
 ---
 
-```{r include = F}
+```{r gloabl options, include = F}
 knitr::opts_chunk$set(warning = F, message = F)
 ```
 
 
 # Objectives
 
-In this lab we will be using R, which is an open access software developed for statistical analysis (but can do some data manipulation, simulation and modeling). We will be using the package `QuantRRA` for rapid risk assessment (still under development).  Make sure you have installed the latest version of [R](https://cloud.r-project.org), [Rstudio](https://www.rstudio.com/products/rstudio/), and [QuantRRA](https://github.com/jpablo91/QuantRRA).  
+In this lab we will be using R, which is an open access software developed for statistical analysis (but can do some data manipulation, simulation and modeling). We will be using the package `QuantRRA` for rapid risk assessment (still under development).  Make sure you have installed the latest version of [R](https://cloud.r-project.org), [Rstudio](https://www.rstudio.com/products/rstudio/), and [QuantRRA](https://github.com/jpablo91/QuantRRA). If you don't want/can't install R and Rstudio in your local machine, you can create a free account of [Rstudio cloud](http://rstudio.cloud/) and use a cloud server to run the code. The objectives for this lab are:  
 
   - Familiarize with methods to develop risk assessment using R
   - Integrate qualitative and quantitative information for the development of RRA
@@ -25,8 +25,30 @@ In this lab we will be using R, which is an open access software developed for s
 
 
 # Basics
+First we have to make sure we  have installed a couple of packages to run this lab:
 
-```{r}
+```{r installing packages, eval = F}
+packages <- c('devtools', # Package for installing external dependencies
+              'sf', # For spatial data manipulation
+              'sparkline') # For visualization
+
+## Now load or install&load all
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
+
+
+devtools::install_github('jpablo91/QuantRRA', dependencies = T) # RRA toolset
+```
+
+
+```{r loading packages}
 # Libraries we will use
 library(sf); library(dplyr)
 library(QuantRRA)
@@ -63,26 +85,6 @@ plotDist(x, # the values sampled
 ```
 
 
-
-
-<!-- ## Truncation -->
-
-```{r include = F}
-# Truncate a distribution -------------
-x <- 1:100
-
-par(mfrow = c(2,2))
-# method, ignore: ignore values ot of bounds
-truncateDist(x = x, range = c(10, 90)) %>% hist(main = 'Ignore')
-# method substitute: substitute values out of bounds for min max provided
-truncateDist(x = x, range = c(10, 90), method = 'sub') %>% hist(main = 'Substitution')
-# Method resample: Resample values out of bounds for values inside bounds
-truncateDist(x = x, range = c(10, 90), method = 'resample') %>% hist(main = 'Resample')
-```
-
-
-<!-- ## Fitting data -->
-
 ## The main function
 
 Now that we covered the basics of `QuantRRA`, we will create our first model. The main function `RRA()` requires two arguments:  
@@ -98,7 +100,7 @@ To represent the model we must identify the inputs and the outputs we want to ca
 
 Lets have a look of how we would represent this in R. This model was adapted and its contained in the package, to access the model file use the following code:
 
-```{r}
+```{r Model file}
 QuantRRA::OIRSA_M[, 1:6]
 ```
 
@@ -114,7 +116,7 @@ The model file (**M**) must be a data.frame where each of the rows is a paramete
 
 When we use the function `RRA()` on the model file, we will calculate the outcome *n* times based on the distributions specified:  
 
-```{r}
+```{r Running the model}
 # Save the model file to an object
 M <- QuantRRA::OIRSA_M
 # Run the model 5000 times
@@ -126,7 +128,7 @@ plotDist(Mo$P)
 The result of this is a table with the distributions sampled for the inputs, and the ones calculated for the outputs. Based on the results, we can estimate the probability that the number of introduction events will be more than 1:
 
 
-```{r}
+```{r P introduction}
 sum(Mo$P > 1) / length(Mo$P)
 ```
 
@@ -138,7 +140,7 @@ We can perform sensitivity analysis on the model to identify the most relevant p
   - *formula* A formula that contains the names of the outcome analyzed and the parameters.  
   - *tree*: we can specify if we want an *interactive* or *static* visualization for our tree. 
 
-```{r}
+```{r SA}
 # First we specify the formula:
 f <- P ~ P1 + P2 + P3 + R1 + R2 + H1 + H2
 # Then we use the function with our results
@@ -148,12 +150,12 @@ SA$VarianceExp # The variance explained by our parameters
 ```
 
 
-```{r}
+```{r Relative Importance}
 SA$RelImport # The relative importance of our parameters
 ```
 
 
-```{r}
+```{r CART}
 SA$RT # The classification and regression tree
 ```
 
@@ -215,7 +217,7 @@ E[Transmission\ events] = O_4 \times I_2
 $$
 We will create our model file from scratch by defining each of the columns that needs to be present in order to calculate the outputs. We will be calculating the probability of transmission for one of the states in Mexico (Mexico city). Now complete the formulas described for the outputs to be calculated:
 
-```{r eval = F}
+```{r Model file setup, eval = F}
 # Get the index for Mexico city:
 state <- which(rbt$State == 'CIUDADDEMEXICO')
 
@@ -260,7 +262,7 @@ M <- data.frame(
 ```
 
 
-```{r include=FALSE}
+```{r Model file Setup solution, include=FALSE}
 # Get the index for Mexico city:
 state <- which(rbt$State == 'CIUDADDEMEXICO')
 
@@ -334,19 +336,19 @@ sum(Mo$E > 1) / length(Mo$E)
 
 Now we will run the sensitivity analysis on the model results for the estimated number of transmission events
 
-```{r}
+```{r SA Rabies}
 SA <- RFCART(data = Mo, f =  E ~ I1 + I2 + I3 + I4 + I5 + I6, tree = 'interactive')
 
 SA$VarianceExp
 ```
 
 
-```{r}
+```{r RF Rabies}
 SA$RelImport
 ```
 
 
-```{r}
+```{rCART Rabies}
 SA$RT
 ```
 
@@ -360,7 +362,7 @@ We can use the function `RRA_s()` to calculate a risk model stratified by a vari
   - **Tbl**, a table where each row represent a strata, and each column represent the name of strata and the input parameters.  
   - **nsim**, number of simulations
 
-```{r}
+```{r Risk Map}
 # We will create a table to use as input
 rbts <- rbt %>% 
   select(State, I1 = DogPop, I2 = HumanPop, I3 = Bites, I4 =VaccinationCov) %>% 
@@ -383,6 +385,11 @@ MxSp %>%  # This is our spatial shape file
   theme_void() # Theme of the plot
 ```
 
+----------------------------
+
+In this lab we created a Model file from scratch, but there are other options if you don't feel comfortable with the user interface of Rstudio. One option is to create the Model table in excel, save it as a CSV and then import it into R. Another option is using the RRA interactive shiny interface that comes with this package (Currently under development), you can call the interactive app by typing in the R console: `QuantRRA::runQuantRRA()`, this will open a new window with a more user friendly interactive interface for creating and uploading model files.
+
+----------------------------
 
 # Reporting the results
 
