@@ -94,7 +94,7 @@ Lets see an example of a pre-made model file. The following model was based on a
 
 To represent the model we must identify the inputs and the outputs we want to calculate. The following figure was adapted from the report by OIRSA
 
-<img src ="../img/OIRSAMODEL.png" style="width:100%;float:center">
+<img src ="img/OIRSAMODEL.png" style="width:100%;float:center">
 
 Lets have a look of how we would represent this in R. This model was adapted and its contained in the package, to access the model file use the following code:
 
@@ -194,7 +194,7 @@ rbt
 
 Now we will create a model file based on the next scenario tree for the transmission of dog rabies to humans:
 
-<img src ="../img/RabiesTree.png" style="width:100%;float:center">
+<img src ="img/RabiesTree.png" style="width:100%;float:center">
 
 We need identify the inputs and outputs, and the relationships between the nodes in our scenario tree. To parametrize our model we will be using the data reported by the vaccination program (such as dog and human population, bite reports, and vaccination coverage) and some theoretical distributions that we can parametrize based on expert opinion or 'what if?' scenarios.  
 
