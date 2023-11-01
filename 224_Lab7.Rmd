@@ -10,6 +10,7 @@ output:
 
 ```{r gloabl options, include = F}
 knitr::opts_chunk$set(warning = F, message = F)
+
 ```
 
 
@@ -44,7 +45,7 @@ package.check <- lapply(
 )
 
 
-devtools::install_github('jpablo91/QuantRRA', dependencies = T) # RRA toolset
+devtools::install_github('spablotemporal/QuantRRA', dependencies = T) # RRA toolset
 ```
 
 
@@ -77,7 +78,7 @@ In this lab we will be using the package `QuantRRA`, which is specifically devel
 n <- 100 # number of observations
 d <- 'Normal(5, 0.12)' # Distribution to sample
 
-x <- SampleDist(x = d, n = n) # Function to sample the distribution
+x <- sampleDist(x = d, n = n) # Function to sample the distribution
 
 # We can use the function plotDist() from the package QuantRRA to get a more familiar output:
 plotDist(x, # the values sampled
@@ -101,7 +102,7 @@ To represent the model we must identify the inputs and the outputs we want to ca
 Lets have a look of how we would represent this in R. This model was adapted and its contained in the package, to access the model file use the following code:
 
 ```{r Model file}
-QuantRRA::OIRSA_M[, 1:6]
+QuantRRA::OIRSA$nodes[, 1:6]
 ```
 
 The model file (**M**) must be a data.frame where each of the rows is a parameter and the columns are the following:
@@ -118,7 +119,7 @@ When we use the function `RRA()` on the model file, we will calculate the outcom
 
 ```{r Running the model}
 # Save the model file to an object
-M <- QuantRRA::OIRSA_M
+M <- QuantRRA::OIRSA$nodes
 # Run the model 5000 times
 Mo <- RRA(M = M, nsim = 5000)
 # Visualize the results:
@@ -144,7 +145,7 @@ We can perform sensitivity analysis on the model to identify the most relevant p
 # First we specify the formula:
 f <- P ~ P1 + P2 + P3 + R1 + R2 + H1 + H2
 # Then we use the function with our results
-SA <- RFCART(data = Mo, f = f, tree = 'interactive')
+SA <- GSA(data = Mo, f = f, tree = 'interactive')
 # The results contain 3 objects:
 SA$VarianceExp # The variance explained by our parameters
 ```
@@ -254,7 +255,7 @@ M <- data.frame(
                    'Pert(0.1, 0.3, 0.5)', NA,
                    NA),
   # Formulas for the output nodes
-  formula = c(NA, NA, 'Insert formula here', # O1 Contact
+  formula = c(NA, NA, 'I1/I2', # O1 Contact
               NA, 'Formula for O2', # O2 Bite
               NA, NA, 'Formula', # O3 infection
               NA, 'Formula', # O4 Transmission
@@ -307,6 +308,7 @@ M <- data.frame(
 ```
 
 
+
 ## Running the model
 
 Now we will run 1000 simulations of the model and plot the distribution of the outputs calculated:
@@ -318,6 +320,15 @@ plotDist(Mo$O1, main = 'Contact probability') # Contact
 ```
 
 **Question 1** Plot the distributions of the Probability of aggression, a dog being infected with rabies, the dog-human transmission and the expected number of cases.
+
+
+```{r}
+plotDist(Mo$O2, main = 'Bite probability') # Bite
+plotDist(Mo$O3, main = 'Infected dog probability') # Infected
+plotDist(Mo$O4, main = 'Transmission probability') # Transmission
+plotDist(Mo$E, main = 'Expected number of cases') # Expected number of transmission events
+```
+
 
 ```{r Answer Q1, eval=FALSE, include=FALSE}
 plotDist(Mo$O2, main = 'Bite probability') # Bite
@@ -332,12 +343,17 @@ plotDist(Mo$E, main = 'Expected number of cases') # Expected number of transmiss
 sum(Mo$E > 1) / length(Mo$E)
 ```
 
+```{r}
+sum(Mo$E > 1) / length(Mo$E)
+```
+
+
 ## Sensitivity analysis
 
 Now we will run the sensitivity analysis on the model results for the estimated number of transmission events
 
 ```{r SA Rabies}
-SA <- RFCART(data = Mo, f =  E ~ I1 + I2 + I3 + I4 + I5 + I6, tree = 'interactive')
+SA <- GSA(data = Mo, f =  E ~ I1 + I2 + I3 + I4 + I5 + I6, tree = 'interactive')
 
 SA$VarianceExp
 ```
@@ -348,7 +364,7 @@ SA$RelImport
 ```
 
 
-```{rCART Rabies}
+```{r CART Rabies}
 SA$RT
 ```
 
@@ -384,6 +400,15 @@ MxSp %>%  # This is our spatial shape file
   scale_fill_gradient(low = 'black', high = 'red') + # set the color scale
   theme_void() # Theme of the plot
 ```
+
+```{r}
+MxSp %>%  # This is our spatial shape file
+  left_join(rabRR, by = c('Entidad' = 'IDs')) %>% 
+  data.frame() %>% 
+  arrange(desc(E_m))
+```
+
+
 
 ----------------------------
 
